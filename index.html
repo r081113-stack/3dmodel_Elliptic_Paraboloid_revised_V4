@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>3D曲面グラフの表示</title>
+    <!-- 1. MathJaxとPlotlyの読み込み -->
+    <script src="https://jsdelivr.net"></script>
+    <script src="https://plot.ly"></script>
+</head>
+<body>
+
+    <!-- 2. グラフを表示する枠（幅と高さを指定） -->
+    <div id="myDiv" style="width:100%; max-width:800px; height:600px; margin: 0 auto;"></div>
+
+    <!-- 3. データを計算してグラフを描画するスクリプト -->
+    <script>
+        // z = x^2 + y^2 のデータをJavaScriptで自動生成する
+        var x_values = [];
+        var y_values = [];
+        var z_values = [];
+
+        // -10 から 10 までの範囲を計算
+        for (var i = -10; i <= 10; i++) {
+            x_values.push(i);
+            y_values.push(i);
+        }
+
+        // 格子状のzデータ（2次元配列）を作成
+        for (var i = 0; i < y_values.length; i++) {
+            var row = [];
+            for (var j = 0; j < x_values.length; j++) {
+                var x = x_values[j];
+                var y = y_values[i];
+                // 数式 z = x^2 + y^2 の計算
+                row.push(x * x + y * y);
+            }
+            z_values.push(row);
+        }
+
+        // グラフのデータ設定
+        var data = [{
+            x: x_values,
+            y: y_values,
+            z: z_values,
+            type: 'surface', // 3D曲面を指定
+            colorscale: 'Viridis' // 綺麗なグラデーション色に設定
+        }];
+
+        // レイアウト設定（数式タイトル）
+        var layout = {
+            title: { 
+                text: '$z = x^2 + y^2$' 
+            },
+            scene: {
+                xaxis: {title: 'X軸'},
+                yaxis: {title: 'Y軸'},
+                zaxis: {title: 'Z軸'}
+            }
+        };
+
+        // 描画実行
+        Plotly.newPlot('myDiv', data, layout);
+    </script>
+
+</body>
+</html>
